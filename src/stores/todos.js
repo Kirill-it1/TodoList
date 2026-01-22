@@ -13,7 +13,7 @@ export const useTodosStore = defineStore('todos', () => {
   const isFiltered = ref(false)
 
 
-  const MAX_SYMBOLS_IN_ROW = 27
+  const MAX_SYMBOLS_IN_ROW = 20
 
  
   const hasTodos = computed(() => {
@@ -31,7 +31,7 @@ export const useTodosStore = defineStore('todos', () => {
   })
 
   const isTextCorrect = computed(() => {
-    return validate(inputValue.value)
+    return validate(trimmedValue.value)
   })
 
 
@@ -39,11 +39,13 @@ export const useTodosStore = defineStore('todos', () => {
     const itemName = text.trim()
 
     if (isTextCorrect.value) {
-      const newId = todos.value.length + 1
+      const newId = todos.value.reduce((acc, {id}) => Math.max(acc, id), 0) + 1
       todos.value.push({
         id: newId,
         text: itemName,
-        isCompleted: false
+        message: '',
+        isCompleted: false,
+        date: new Date().toLocaleString()
       })
 
 
@@ -63,6 +65,7 @@ export const useTodosStore = defineStore('todos', () => {
   }
   
   const removeItem = (itemId) => {
+    console.log(itemId)
     todos.value = todos.value.filter(({id}) => id !== itemId)
   }
 

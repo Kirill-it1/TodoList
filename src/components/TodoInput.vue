@@ -1,14 +1,20 @@
 <template>
   <div class="todo__field field add-field">
-    <label for="add-task-input" class="field__label">Название таски</label>
-    <input type="text"
-           class="input field__input"
-           placeholder=" "
-           id="add-task-input"
-           :value="modelValue"
-           @keyup.enter="$emit('add', $event.target.value)"
-           @input="$emit('update:modelValue', $event.target.value)"
-           ref="inputRef"
+    <label 
+      for="add-task-input" 
+      class="field__label"
+    >
+      Название таски
+    </label>
+    <input 
+      type="text"
+      class="input field__input"
+      placeholder=" "
+      id="add-task-input"
+     :value="modelValue"
+     @keyup.enter="$emit('add', $event.target.value)"
+     @input="$emit('update:modelValue', $event.target.value)"
+      ref="inputRef"
     />
   </div>
 </template>

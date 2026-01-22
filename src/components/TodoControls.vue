@@ -1,24 +1,33 @@
-<template>
+trimmedValuc<template>
   <div class="todo__field field filter-field">
-    <label for="filter-tasks-input" class="field__label">Фильтр</label>
-    <input type="text"
-          :value="filter"
-          class="input field__input"
-          placeholder=" "
-          id="filter-tasks-input"
-          @input="$emit('update:filter', $event.target.value)"
+    <label 
+      for="filter-tasks-input" 
+      class="field__label"
+    >
+      Фильтр
+    </label>
+    <input 
+      type="text"
+      class="input field__input"
+      placeholder=" "
+      id="filter-tasks-input"
+     :value="filter"
+     @input="$emit('update:filter', $event.target.value)"
     />
   </div>
-  <p class="todo__message">Current taskname is {{ currentValue.length !== 0 ? currentValue : 'EMPTY'}}, which is <span :style="{fontWeight: 'bolder', color: validationResult ? 'green' : 'red'}">{{ validationResult ? 'correct' : 'incorrect' }} </span></p>
+  <p class="todo__message">Current taskname is {{ trimmedValue.length !== 0 ? trimmedValue : 'EMPTY'}}, which is <span :style="{fontWeight: 'bolder', color: validationResult ? 'green' : 'red'}">{{ validationResult ? 'correct' : 'incorrect' }} </span></p>
   <div class="button-block">
-    <button class="add-task todo__button button" 
-            @click="$emit('add', inputValue)"
+    <button 
+      class="add-task todo__button button" 
+     @click="$emit('add', inputValue)"
+     :disabled="!validationResult"
     >
       Add new task
     </button>
-    <button class="remove-tasks todo__button button" 
-            @click="$emit('remove')" 
-            :disabled="!hasTodos"
+    <button 
+      class="remove-tasks todo__button button" 
+     @click="$emit('remove')" 
+     :disabled="!hasTodos"
     >
       Remove all tasks
     </button>
@@ -37,7 +46,7 @@
       type: String,
       default: ''
     },
-    currentValue: {
+    trimmedValue: {
       type: String,
       default: ''
     },
@@ -51,7 +60,7 @@
     }
   })
 
-  const validationResult = computed(() => props.isValid(props.inputValue))
+  const validationResult = computed(() => props.isValid(props.trimmedValue))
 
   // Отправили
   const emit = defineEmits(['update:filter', 'add', 'remove'])
@@ -75,8 +84,8 @@
       color: rgb(134, 0, 0)
     }
 
-    .remove-tasks:disabled {
-      opacity: 0.6;
+    .button:disabled {
+      opacity: 0.4;
       color: black;
     }
 </style>

@@ -1,44 +1,19 @@
   <template>
+    <nav>
+      <router-link to="/">HOME</router-link>
+    </nav>
     <div class="todo">
       <h1 class="title todo__title">My TODO list</h1>
-      <!-- <TodoInput :val="inputValue" @add="addItem" @update="val => inputValue = val" /> -->
 
-      <TodoInput v-model="store.inputValue" @add="store.addItem" />
-
-      <TodoControls
-        v-model:filter="store.filterQuery"
-        :input-value="store.inputValue"
-        :currentValue="store.trimmedValue"
-        :has-todos="store.hasTodos"
-        :isValid="store.validate"
-        @add="store.addItem"
-        @remove="store.removeItems"
-      />
-      
-
-      <TodoList
-        :message="store.emptyMessage"
-        :todos="store.currentTodos"
-        @toggle="store.toggleTodo"
-        @remove="store.removeItem"
-      />
+      <main>
+        <router-view />
+      </main>
     </div>
 
 
 
   </template>
-  <script setup>
-    // import { useTodos } from './composables/useTodos'
-    import TodoInput from './components/TodoInput.vue'
-    import TodoControls from './components/TodoControls.vue'
-    import TodoList from './components/TodoList.vue'
-    import { useTodosStore } from './stores/todos'
 
-    const store = useTodosStore()
-
-
-
-  </script>
   <style>
     *{
       margin: 0;
@@ -107,6 +82,44 @@
     .todo__title {
       margin-bottom: 20px;
     }
+
+    .checkbox {
+    position: relative;
+    appearance: none;
+
+    display: block;
+    
+
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  .checkbox::after {
+    content: '';
+    position: absolute;
+    /* Styling the checkmark itself */
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    /* Positioning the checkmark within the box */
+    left: 5px;
+    top: 2px;
+    /* Hide the checkmark when not checked */
+    display: none; 
+  }
+
+  .checkbox:checked {
+    background-color: black;
+  }
+
+  .checkbox:checked::after {
+    display: block;
+  }
 
 
 
