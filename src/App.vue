@@ -3,24 +3,24 @@
       <h1 class="title todo__title">My TODO list</h1>
       <!-- <TodoInput :val="inputValue" @add="addItem" @update="val => inputValue = val" /> -->
 
-      <TodoInput v-model="inputValue" @add="addItem" />
+      <TodoInput v-model="store.inputValue" @add="store.addItem" />
 
       <TodoControls
-        v-model:filter="filterQuery"
-        :input-value="inputValue"
-        :currentValue="trimmedValue"
-        :isCorrectName="isTextCorrect"
-        :isValid="isValid"
-        @add="addItem"
-        @remove="removeItems"
+        v-model:filter="store.filterQuery"
+        :input-value="store.inputValue"
+        :currentValue="store.trimmedValue"
+        :has-todos="store.hasTodos"
+        :isValid="store.validate"
+        @add="store.addItem"
+        @remove="store.removeItems"
       />
       
 
       <TodoList
-        :message="emptyMessage"
-        :todos="currentTodos"
-        @toggle="toggleTodo"
-        @remove="removeItem"
+        :message="store.emptyMessage"
+        :todos="store.currentTodos"
+        @toggle="store.toggleTodo"
+        @remove="store.removeItem"
       />
     </div>
 
@@ -28,35 +28,16 @@
 
   </template>
   <script setup>
-    import { defineAsyncComponent } from 'vue'
-    import { useTodos } from './composables/useTodos'
-
+    // import { useTodos } from './composables/useTodos'
     import TodoInput from './components/TodoInput.vue'
     import TodoControls from './components/TodoControls.vue'
     import TodoList from './components/TodoList.vue'
+    import { useTodosStore } from './stores/todos'
+
+    const store = useTodosStore()
 
 
-    const {
-      inputValue,
-      filterQuery,
-      isTextCorrect,
 
-      currentTodos,
-      trimmedValue,
-      emptyMessage,
-
-      addItem,
-      removeItem,
-      removeItems,
-      toggleTodo
-    } = useTodos()
-
-    const isValid = (text, callback) => {
-      const isvalid = text.length > 0
-      const message = isvalid ? "Все хорошо": "Плохо"
-      callback({isvalid, message})
-      return message
-    }
   </script>
   <style>
     *{
@@ -76,12 +57,17 @@
       width: 100%;
       height: 40px;
       padding: 10px;
-
+      outline: none;
 
       border-radius: 4px;
-      outline: none;
+      
       border: 0px;
       font-size: 20px;
+    }
+
+    .input:focus {
+      outline-style: dashed;
+      outline-width: 2px;
     }
     .todo{
       width: 600px;
@@ -97,7 +83,16 @@
       padding: 14px 20px 10px;
       border-radius: 5px;
       display: block;
-      
+      transition: .1s;
+    }
+
+    .button:not(:disabled){
+      cursor: pointer;
+
+    }
+
+    .button:not(:disabled):hover {
+      transform: scale(1.02);
     }
     
     .todo__button {

@@ -1,15 +1,11 @@
 import { ref, computed, watch } from 'vue' 
-
 import { defineStore } from 'pinia'
+import { useLocalStorage } from '../composables/useLocalStorage'
 
-export function useTodos() {
 
-  const todos = ref([
-    {id: 1, text: 'Learn Vue 3', isCompleted: false},
-    {id: 2, text: 'Explore Compositions API', isCompleted: false},
-    {id: 3, text: 'Build something awesome', isCompleted: false},
-    {id: 4, text: 'Start learning new things', isCompleted: true},
-  ])
+export const useTodosStore = defineStore('todos', () => {
+
+  const { data: todos, clear: clearStorage } = useLocalStorage('todos', [])
 
   const filteredTodos = ref([])
   const inputValue = ref('')
@@ -17,12 +13,14 @@ export function useTodos() {
   const isFiltered = ref(false)
 
 
-  const MAX_SYMBOLS_IN_ROW = 10
+  const MAX_SYMBOLS_IN_ROW = 27
 
  
+  const hasTodos = computed(() => {
 
+    return todos.value.length !== 0
 
-  const hasTodos = computed(() => todos.value.length !== 0)
+  })
 
   const currentTodos = computed(() => isFiltered.value ? filteredTodos.value : todos.value)
 
@@ -33,7 +31,7 @@ export function useTodos() {
   })
 
   const isTextCorrect = computed(() => {
-    return Boolean(trimmedValue.value.length && (inputValue.value.split(' ').reduce((acc, val) => {return Math.max(acc, val.length)}, 0) <= MAX_SYMBOLS_IN_ROW))
+    return validate(inputValue.value)
   })
 
 
@@ -44,7 +42,8 @@ export function useTodos() {
       const newId = todos.value.length + 1
       todos.value.push({
         id: newId,
-        text: itemName
+        text: itemName,
+        isCompleted: false
       })
 
 
@@ -59,7 +58,7 @@ export function useTodos() {
     if (hasTodos.value) {
       const isSure = confirm("Вы уверены, что хотите удалить все таски?")
       if (isSure) 
-        todos.value = []
+        clearStorage()
     }
   }
   
@@ -74,7 +73,9 @@ export function useTodos() {
     console.log(`Таска "${item.text}" ${item.isCompleted ? 'выполнена' : 'не выполнена'}`)
   }
 
-
+  const validate = (text) => {
+    return Boolean(text.length && (text.split(' ').reduce((acc, val) => {return Math.max(acc, val.length)}, 0) <= MAX_SYMBOLS_IN_ROW))
+  }
 
   watch(filterQuery, (query, _) => {
 
@@ -96,6 +97,13 @@ export function useTodos() {
     )
   }
 
+  // const isValid = (text, callback) => {
+  //   const isvalid = is
+  //   const message = isvalid ? "Все хорошо": "Плохо"
+  //   callback({isvalid, message})
+  //   return message
+  // }
+
   return {
     todos,
     filteredTodos,
@@ -103,6 +111,7 @@ export function useTodos() {
     filterQuery,
     isFiltered,
     isTextCorrect,
+    hasTodos,
 
 
     currentTodos,
@@ -112,6 +121,7 @@ export function useTodos() {
     addItem,
     removeItem,
     removeItems,
-    toggleTodo
+    toggleTodo,
+    validate
   }
-}
+})

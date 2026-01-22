@@ -21,8 +21,7 @@
 
 </template> 
 <script setup>
-  import { ref } from 'vue'
-  
+ 
   defineProps({
     todos: {
       type: Array,
@@ -114,7 +113,5 @@
   .item_completed .item__text{
     text-decoration: line-through;
   }
-  .remove-tasks {
-    color: rgb(134, 0, 0)
-  }
+
 </style>

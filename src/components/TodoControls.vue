@@ -4,11 +4,12 @@
     <input type="text"
           :value="filter"
           class="input field__input"
+          placeholder=" "
           id="filter-tasks-input"
           @input="$emit('update:filter', $event.target.value)"
     />
   </div>
-  <p class="todo__message">Current taskname is {{ currentValue.length !== 0 ? currentValue : 'EMPTY'}}, which is <span :style="{fontWeight: 'bolder', color: isCorrectName ? 'green' : 'red'}">{{ isCorrectName ? 'correct' : 'incorrect' }}</span> But I think {{ validationResult }}</p>
+  <p class="todo__message">Current taskname is {{ currentValue.length !== 0 ? currentValue : 'EMPTY'}}, which is <span :style="{fontWeight: 'bolder', color: validationResult ? 'green' : 'red'}">{{ validationResult ? 'correct' : 'incorrect' }} </span></p>
   <div class="button-block">
     <button class="add-task todo__button button" 
             @click="$emit('add', inputValue)"
@@ -17,6 +18,7 @@
     </button>
     <button class="remove-tasks todo__button button" 
             @click="$emit('remove')" 
+            :disabled="!hasTodos"
     >
       Remove all tasks
     </button>
@@ -24,7 +26,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, watch} from 'vue'
+  import { computed } from 'vue'
   // Приняли
   const props = defineProps({
     filter: {
@@ -39,7 +41,7 @@
       type: String,
       default: ''
     },
-    isCorrectName: {
+    hasTodos: {
       type: Boolean,
       default: false
     },
@@ -49,7 +51,7 @@
     }
   })
 
-  const validationResult = computed(() => props.isValid(props.inputValue, (obj) => obj.message))
+  const validationResult = computed(() => props.isValid(props.inputValue))
 
   // Отправили
   const emit = defineEmits(['update:filter', 'add', 'remove'])
@@ -66,5 +68,15 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
+    }
+
+
+    .remove-tasks {
+      color: rgb(134, 0, 0)
+    }
+
+    .remove-tasks:disabled {
+      opacity: 0.6;
+      color: black;
     }
 </style>

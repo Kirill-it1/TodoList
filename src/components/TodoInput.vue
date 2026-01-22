@@ -3,6 +3,7 @@
     <label for="add-task-input" class="field__label">Название таски</label>
     <input type="text"
            class="input field__input"
+           placeholder=" "
            id="add-task-input"
            :value="modelValue"
            @keyup.enter="$emit('add', $event.target.value)"
@@ -36,14 +37,29 @@
 </script>
 <style>
     .todo__field {
+      position: relative;
       width: 100%;
       margin-bottom: 20px;
+      height: 68px;
+      padding-top: 23px;
     }
 
     .field__label {
+      position: absolute;
+      top: 0;
+      left: 0;
       display: block;
-      margin-bottom: 8px
+      margin-bottom: 8px;
+      
+      transition: .2s;
     }
+
+    .field:has(.field__input:placeholder-shown) .field__label {
+      font-size: 20px;
+      transform: translate(10px, 35px);
+      opacity: 0.5;
+    }
+
 
 
 </style>
