@@ -33,7 +33,7 @@
           class="button item__button"
          @click="$emit('remove', item.id)" 
         >
-          delete task
+          delete&nbsp;task
         </button>
       </li>
     </ul>
@@ -74,6 +74,8 @@
   .item__link {
     display: block;
     margin-left: auto;
+    text-decoration:underline;
+    cursor: pointer;
   }
 
   .item__button {

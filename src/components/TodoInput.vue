@@ -4,7 +4,7 @@
       for="add-task-input" 
       class="field__label"
     >
-      Название таски
+      Название задачи
     </label>
     <input 
       type="text"
@@ -15,12 +15,13 @@
      @keyup.enter="$emit('add', $event.target.value)"
      @input="$emit('update:modelValue', $event.target.value)"
       ref="inputRef"
+      autocomplete="off"
     />
   </div>
 </template>
 
 <script setup>
-  import { ref, onMounted} from 'vue'
+  import { ref, onMounted } from 'vue'
   // Пришло от родителя теперь имеет право быть в темплейте
   defineProps({
     modelValue: {

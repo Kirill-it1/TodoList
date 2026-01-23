@@ -65,8 +65,12 @@ export const useTodosStore = defineStore('todos', () => {
   }
   
   const removeItem = (itemId) => {
-    console.log(itemId)
-    todos.value = todos.value.filter(({id}) => id !== itemId)
+    todos.value = todos.value.filter(({id}) => id != itemId)
+  }
+
+  const updateItem = (itemId, newValue) => {
+    const task = todos.value.find(({id}) => id == itemId)
+    Object.assign(task, newValue)
   }
 
  
@@ -123,6 +127,7 @@ export const useTodosStore = defineStore('todos', () => {
 
     addItem,
     removeItem,
+    updateItem,
     removeItems,
     toggleTodo,
     validate

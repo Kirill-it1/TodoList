@@ -1,14 +1,13 @@
   <template>
-    <nav>
-      <router-link to="/">HOME</router-link>
+    <nav class="nav">
+      <router-link class="nav__link" to="/">HOME</router-link> |
+      <router-link class="nav__link" to="/tasks/">TASKS</router-link>
     </nav>
-    <div class="todo">
-      <h1 class="title todo__title">My TODO list</h1>
+
 
       <main>
         <router-view />
       </main>
-    </div>
 
 
 
@@ -43,6 +42,18 @@
     .input:focus {
       outline-style: dashed;
       outline-width: 2px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      margin: 40px auto;
+      width: 200px;
+    }
+
+
+    .nav__link {
+      display: block;
     }
     .todo{
       width: 600px;

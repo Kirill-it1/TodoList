@@ -11,7 +11,7 @@
       <input 
         id="text-input" 
         class="input task__input" 
-        v-model="currentTask.text" 
+        v-model="localTask.text" 
         autocomplete="off"
       />
 
@@ -27,7 +27,8 @@
         class="input task__input task__message" 
         name="task-message" 
         id="text-message" 
-        v-model="currentTask.message"
+        v-model="localTask.message"
+        
       >
       </textarea>
     </div>
@@ -35,29 +36,58 @@
       <input 
         type="checkbox" 
         class="checkbox task__checkbox"  
-        v-model="currentTask.isCompleted" 
+        v-model="localTask.isCompleted" 
       />
       <span class="task__checkbox-text">Отметить выполненным</span>
     </label>
-    
-    <p class="task__date">Создано: {{ currentTask.date }}</p>
+    <div class="task__footer">
+      <p class="task__date">Создано: {{ currentTask.date }}</p>
+      <button class="button task__quit task__button" @click="quitWithSaving">SAVE AND QUIT</button>
+    </div>
   </div>
 </template>
 <script setup>
   import { useTodosStore } from './stores/todos';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
 
-  import { computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
 
   const route = useRoute()
+  const router = useRouter()
 
   const store = useTodosStore()
 
-  const currentTask = computed(() => {
-    const taskId = route.params.id
-    return store.todos.find(({id}) => id == taskId)
+  const taskId = route.params.id
+  
+  const currentTask = computed({
+    
+    get() {
+      const cur = store.todos.find(({id}) => id == taskId)
+      return cur
+    },
+
+    set(newValue) {
+      store.updateItem(taskId, newValue)
+    }
+    
   })
 
+  const localTask = ref({})
+  watch(currentTask, (value) => {
+    localTask.value = JSON.parse(JSON.stringify(value))
+  }, { immediate: true, deep: true })
+
+  const saveChanges = () => {
+
+    if (localTask.value.text?.trim()) {
+      currentTask.value = localTask.value
+    }
+  }
+
+  const quitWithSaving = () => {
+    saveChanges()
+    router.push('/tasks/')
+  }
 
 
 </script>
@@ -74,6 +104,7 @@
   }
   .task__message {
     height: 300px;
+    resize: none;
   }
   .task__checkbox {
     display: block;
@@ -92,4 +123,15 @@
     display: block;
     
   }
+
+  .task__footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .task__button{
+    background-color: #fff;
+  }
+
 </style>
