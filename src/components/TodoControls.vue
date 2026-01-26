@@ -13,6 +13,7 @@ trimmedValuc<template>
       id="filter-tasks-input"
      :value="filter"
      @input="$emit('update:filter', $event.target.value)"
+     tabindex="4"
     />
   </div>
   <p class="todo__message">Current taskname is {{ trimmedValue.length !== 0 ? trimmedValue : 'EMPTY'}}, which is <span :style="{fontWeight: 'bolder', color: validationResult ? 'green' : 'red'}">{{ validationResult ? 'correct' : 'incorrect' }} </span></p>
@@ -20,14 +21,16 @@ trimmedValuc<template>
     <button 
       class="add-task todo__button button" 
      @click="$emit('add', inputValue)"
-     :disabled="!validationResult"
+     :aria-disabled="!validationResult"
+     tabindex="5"
     >
       Add new task
     </button>
     <button 
       class="remove-tasks todo__button button" 
      @click="$emit('remove')" 
-     :disabled="!hasTodos"
+     :aria-disabled="!hasTodos"
+     tabindex="6"
     >
       Remove all tasks
     </button>
@@ -84,8 +87,5 @@ trimmedValuc<template>
       color: rgb(134, 0, 0)
     }
 
-    .button:disabled {
-      opacity: 0.4;
-      color: black;
-    }
+
 </style>

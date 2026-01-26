@@ -13,6 +13,7 @@
         class="input task__input" 
         v-model="localTask.text" 
         autocomplete="off"
+        tabindex="1"
       />
 
     </div>

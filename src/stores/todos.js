@@ -12,6 +12,8 @@ export const useTodosStore = defineStore('todos', () => {
   const filterQuery = ref('')
   const isFiltered = ref(false)
 
+  const lastAddedId = ref(null)
+
 
   const MAX_SYMBOLS_IN_ROW = 20
 
@@ -40,7 +42,7 @@ export const useTodosStore = defineStore('todos', () => {
 
     if (isTextCorrect.value) {
       const newId = todos.value.reduce((acc, {id}) => Math.max(acc, id), 0) + 1
-      todos.value.push({
+      todos.value.unshift({
         id: newId,
         text: itemName,
         message: '',
@@ -48,10 +50,17 @@ export const useTodosStore = defineStore('todos', () => {
         date: new Date().toLocaleString()
       })
 
+      inputValue.value = ''
+
+      lastAddedId.value = newId
+      setTimeout(() => {
+        lastAddedId.value = null
+      }, 400)
+
 
     }
 
-    inputValue.value = ''
+
 
 
   }
@@ -65,7 +74,17 @@ export const useTodosStore = defineStore('todos', () => {
   }
   
   const removeItem = (itemId) => {
-    todos.value = todos.value.filter(({id}) => id != itemId)
+    const deletedElem = document.querySelector(`#item-${itemId}`)
+    // const listElem = document.querySelector('.tasks__list')
+
+    // listElem.style.maxHeight = listElem.clientHeight + 'px'
+    deletedElem.classList.add('dissapearing')
+
+    setTimeout(() => {
+      deletedElem.classList.remove('dissapearing')
+      todos.value = todos.value.filter(({id}) => id != itemId)
+    }, 400)
+    
   }
 
   const updateItem = (itemId, newValue) => {
@@ -125,11 +144,14 @@ export const useTodosStore = defineStore('todos', () => {
     trimmedValue,
     emptyMessage,
 
+
     addItem,
     removeItem,
     updateItem,
     removeItems,
     toggleTodo,
-    validate
+    validate,
+
+    lastAddedId,
   }
 })

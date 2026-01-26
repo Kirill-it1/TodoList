@@ -27,14 +27,23 @@
   import TodoList from './components/TodoList.vue'
   import { useTodosStore } from './stores/todos'
 
+  import { provide, watch } from 'vue'
+  import { storeToRefs } from 'pinia'
+
   import { useRouter } from 'vue-router'
 
   const router = useRouter()
   const store = useTodosStore()
 
-  const gotoTask = (itemId) => {
+  const gotoTask = (itemId, event) => {
+    event.preventDefault()
     router.push({name: 'tasks', params: { id: itemId }})
   }
+
+  const { lastAddedId } = storeToRefs(store)
+  
+  provide('lastAddedItemId', lastAddedId)
+
 
 
 

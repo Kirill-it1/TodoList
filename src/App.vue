@@ -1,7 +1,7 @@
   <template>
     <nav class="nav">
-      <router-link class="nav__link" to="/">HOME</router-link> |
-      <router-link class="nav__link" to="/tasks/">TASKS</router-link>
+      <router-link class="nav__link" to="/" tabindex="2">HOME</router-link> |
+      <router-link class="nav__link" to="/tasks/" tabindex="3">TASKS</router-link>
     </nav>
 
 
@@ -18,6 +18,9 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+
+    }
+    html {
       font-family: 'Courier New', Courier, monospace;
       line-height: 100%;
     }
@@ -72,12 +75,17 @@
       transition: .1s;
     }
 
-    .button:not(:disabled){
+    .button[aria-disabled="true"] {
+      opacity: 0.4;
+      color: black;
+    }
+
+    .button:not([aria-disabled="true"]){
       cursor: pointer;
 
     }
 
-    .button:not(:disabled):hover {
+    .button:not([aria-disabled="true"]):hover {
       transform: scale(1.02);
     }
     

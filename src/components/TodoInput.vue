@@ -16,6 +16,7 @@
      @input="$emit('update:modelValue', $event.target.value)"
       ref="inputRef"
       autocomplete="off"
+      tabindex="1"
     />
   </div>
 </template>
@@ -63,7 +64,7 @@
 
     .field:has(.field__input:placeholder-shown) .field__label {
       font-size: 20px;
-      transform: translate(10px, 35px);
+      transform: translate(10px, 38px);
       opacity: 0.5;
     }
 
